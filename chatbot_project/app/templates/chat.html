@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smarti's Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 25%;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-right: 2px solid #ccc;
+        }
+        .chat-container {
+            width: 75%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        #user-input {
+            display: flex;
+        }
+        #user-input input {
+            flex: 1;
+            padding: 10px;
+        }
+        #user-input button {
+            padding: 10px;
+        }
+        .recommended-question {
+            background-color: #e2e2e2;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .recommended-question:hover {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Recommended Questions</h3>
+        <div class="recommended-question">What is AI</div>
+        <div class="recommended-question">what is the capital of india</div>
+        <div class="recommended-question">how many languages are there in india</div>
+        <div class="recommended-question">who is the prime minister of india</div>
+        <div class="recommended-question">how does an ats scan my resume</div>
+        <div class="recommended-question">tell me a riddle</div>
+        <div class="recommended-question">what is the tallest mountain</div>
+        <div class="recommended-question">how far is the sun from earth</div>
+        <div class="recommended-question">what is 5 plus 3</div>
+
+    </div>
+
+<div class="chat-container">
+    <div class="chat-header">AI Chatbot</div>
+    <div id="chatbox" class="chat-box"></div>
+
+    <div class="input-container">
+        <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+        <button id="sendBtn">Send</button>
+    </div>
+</div>
+
+ <script>
+ 	window.sendMessage = sendMessage;
+
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+    document.getElementById("userInput").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") sendMessage();
+    });
+
+    function sendMessage() {
+        const messageInput = document.getElementById("userInput");
+        const chatBox = document.getElementById("chatbox");
+        const userMessage = messageInput.value.trim();
+
+        if (!userMessage) return;
+
+        // Add user message
+        chatBox.innerHTML += `<div><strong>You:</strong> ${userMessage}</div>`;
+        messageInput.value = "";
+
+        // Send to backend
+        fetch("/get", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `msg=${encodeURIComponent(userMessage)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatBox.innerHTML += `<div><strong>Bot:</strong> ${data.response}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+        });
+    }
+
+    document.getElementById("userInput").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
+
+      document.querySelectorAll('.recommended-question').forEach(item => {
+        item.addEventListener('click', () => {
+            document.getElementById('message').value = item.innerText;
+            sendMessage();  // Make sure this triggers your function
+        });
+    });
+</script>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>

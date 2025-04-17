@@ -1,0 +1,35 @@
+Flask==2.2.5
+Flask-WTF==1.1.1
+transformers==4.36.2
+torch==2.2.1
+Werkzeug==2.2.3
+WTForms==3.1.2
+requests==2.31.0
+
+pip install -r requirements.txt
+
+
+
+How to Run the AI-Powered Chatbot Application
+
+	To start the AI-powered chatbot, follow the steps below:
+
+	Navigate to the app folder in your project directory.
+
+Run the main.py file using the following command:
+
+	python main.py
+
+If the application does not start correctly or throws an error, try the following:
+
+	Open the main.py file.
+
+	Remove or comment out the line containing:
+
+	debug=True
+
+This may resolve compatibility or deployment issues in certain environments.
+	
+	Ensure all required dependencies are installed.
+
+	Refer to the requirements.txt file located in the root directory.

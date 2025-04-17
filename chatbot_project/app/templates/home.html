@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h2>Welcome, {{ user }}!</h2>
+
+<div class="chat-container">
+        <div class="chat-header">AI Chatbot</div>
+        <div id="chatbox" class="chat-box"></div>
+
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+<a href="{{ url_for('logout') }}">Logout</a>
+    <script>
+        function sendMessage() {
+            let userText = document.getElementById("userInput").value.trim();
+            if (userText === "") return;
+
+            let chatbox = document.getElementById("chatbox");
+
+            let userMessage = `<div class='user-message'>${userText}</div>`;
+            chatbox.innerHTML += userMessage;
+            document.getElementById("userInput").value = "";
+
+            chatbox.innerHTML += `<div class='bot-message'>Thinking...</div>`;
+            chatbox.scrollTop = chatbox.scrollHeight;
+
+            fetch("/get", {
+                method: "POST",
+                body: new URLSearchParams({ "msg": userText }),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector(".bot-message:last-child").innerHTML = data.response;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            });
+        }
+    </script>
+{% endblock %}
