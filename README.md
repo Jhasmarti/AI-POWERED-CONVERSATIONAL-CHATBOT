@@ -5,4 +5,4 @@ This is my MCA final year project. It includes a login/register system and a cha
 - Frontend: HTML, CSS, JavaScript
 - Backend: Flask (Python)
 - AI: DialoGPT / Hugging Face
-- No Database Required
+
